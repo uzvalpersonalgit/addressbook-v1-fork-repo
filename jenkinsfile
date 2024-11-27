@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('compile') {
+            steps {
+                script {
+                    echo "complie the code"
+                }
+            }
+        }
+        stage('codereview') {
+            steps {
+                script {
+                    echo "codereview done!"
+                }
+            }
+        }
+        stage('unittest') {
+            steps {
+                script {
+                    echo "unittest done"
+                }
+            }
+        }
+        stage('codecoverage') {
+            steps {
+                script {
+                    echo "codecoverage is there"
+                }
+            }
+        }
+        stage('package') {
+            steps {
+                script {
+                    echo "package"
+                }
+            }
+        }
+        stage('artifact') {
+            steps {
+                script {
+                    echo "artifact"
+                }
+            }
+        }
+    }
+}
