@@ -17,6 +17,10 @@ pipeline {
        // password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
     }
 
+    environment {
+        BUILD_SERVER='ec2-user@172.31.47.36'
+    }
+
     stages {
         stage('compile') {
             agent any
@@ -67,7 +71,7 @@ pipeline {
         }
         stage('package') {
 
-            agent any
+            agent any  //this is a master
 
             input{
                 message "Select the platform for deployment"
@@ -77,16 +81,20 @@ pipeline {
                 }
             }
 
-
-
             steps {
                 script {
+                    sshagent(['slave2']) //ssh connection to slave2 
+                     {
                     echo "packaging the code"
                     echo "platform is ${Platform}"
                     echo "packaging the version ${params.APPVERSION}"
-                    sh "mvn package"
+                    //sh "mvn package" //cannot shell command because salve2 is empty
+                    sh "scp -o StrictHostKeyChecking=no server-script.sh ${BUILD_SERVER}:/home/ec2-user"// server-script is not there in slave2 so, this command will copy from master as mnetioned agent any 
+                    sh "ssh -o StrictHostKeyChecking=no ${BUILD_SERVER} 'bash ~/server-script.sh'" //this shell command is used to connect to slave2 and run shell script
+                    
                 }
             }
+        }
         }
         stage('artifact') {
             steps {
@@ -97,3 +105,4 @@ pipeline {
         }
     }
 }
+
