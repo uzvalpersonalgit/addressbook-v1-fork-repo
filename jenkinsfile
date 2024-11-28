@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
 
     parameters{
         string(name: 'Env', defaultValue: 'Test', description: 'environment to deploy')
@@ -15,6 +15,7 @@ pipeline {
 
     stages {
         stage('compile') {
+            agent any
             steps {
                 script {
                     echo "complie the code"
@@ -24,6 +25,7 @@ pipeline {
             }
         }
         stage('codereview') {
+            agent any
             steps {
                 script {
                     echo "codereview done!"
@@ -32,6 +34,7 @@ pipeline {
             }
         }
         stage('unittest') {
+            agent any
             when{
                 expression{
                     params.executeTests == true
@@ -50,6 +53,7 @@ pipeline {
             }
         }
         stage('codecoverage') {
+            agent {label 'ec2-linux-slave1'}
             steps {
                 script {
                     echo "codecoverage is there"
@@ -58,6 +62,8 @@ pipeline {
             }
         }
         stage('package') {
+
+            agent any
 
             input{
                 message "Select the platform for deployment"
