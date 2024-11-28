@@ -19,6 +19,7 @@ pipeline {
                 script {
                     echo "complie the code"
                     echo "Compile in ${params.Env}"
+                    sh "mvn compile"
                 }
             }
         }
@@ -26,6 +27,7 @@ pipeline {
             steps {
                 script {
                     echo "codereview done!"
+                    sh "mvn pmd:pmd"
                 }
             }
         }
@@ -38,6 +40,7 @@ pipeline {
             steps {
                 script {
                     echo "unittest done"
+                    sh "mvn test"
                 }
             }
         }
@@ -45,6 +48,7 @@ pipeline {
             steps {
                 script {
                     echo "codecoverage is there"
+                    sh "mvn verify"
                 }
             }
         }
@@ -65,6 +69,7 @@ pipeline {
                     echo "packaging the code"
                     echo "platform is ${Platform}"
                     echo "packaging the version ${params.APPVERSION}"
+                    sh "mvn package"
                 }
             }
         }
